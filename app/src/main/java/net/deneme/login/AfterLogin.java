@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,17 +54,29 @@ public class AfterLogin extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                probabilites.add(addProbablity.getText().toString());
-                arrayAdapter.notifyDataSetChanged();
+                if(!addProbablity.getText().toString().isEmpty()){
+                    probabilites.add(addProbablity.getText().toString());
+                    arrayAdapter.notifyDataSetChanged();}
+                else{
+                    Toast.makeText(getApplicationContext(),"Fields can not be NULL!!",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
         random.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Random rand = new Random();
-            int randint = rand.nextInt(probabilites.size()-1);
-            last.setText(probabilites.get(randint));
+                if(probabilites.size()>0){
+                    Random rand = new Random();
+                    int randint = rand.nextInt(probabilites.size()-1);
+                    last.setText(probabilites.get(randint));
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"List is empty!",Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
 
