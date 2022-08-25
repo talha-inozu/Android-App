@@ -30,16 +30,17 @@ public class Database extends SQLiteOpenHelper {
     }
     public  long ekleKullanici(Kullanicilar kullanici) {
         SQLiteDatabase db = this.getWritableDatabase();
+        if(!this.kek(kullanici.getKullaniciadi())){
 
-        ContentValues cv = new ContentValues();
-        cv.put("Adi",kullanici.getKullaniciadi());
-        cv.put("Email",kullanici.getEmailler());
-        cv.put("Saki",kullanici.getSanslisayi());
-        cv.put("Siffre",kullanici.getSifreler());
-        long id = db.insert(kullanici_tablosu, null, cv);
-        return id;
-
-
+            return 0;
+        }
+        else{ContentValues cv = new ContentValues();
+            cv.put("Adi",kullanici.getKullaniciadi());
+            cv.put("Email",kullanici.getEmailler());
+            cv.put("Saki",kullanici.getSanslisayi());
+            cv.put("Siffre",kullanici.getSifreler());
+            long id = db.insert(kullanici_tablosu, null, cv);
+            return id;}
 
     }
     public boolean  kek (String Adi) {
