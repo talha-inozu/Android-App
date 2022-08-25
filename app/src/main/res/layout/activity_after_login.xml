@@ -9,34 +9,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="411dp"
         android:layout_height="97dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-1dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/exit"
-            android:layout_width="77dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="330dp"
-            android:layout_marginLeft="330dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="78dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
             android:text="Çıkış yap"
-            android:textSize="8sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.746" />
 
         <TextView
             android:id="@+id/ki"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginTop="16dp"
             android:text="TextView"
+            app:autoSizeTextType="none"
+            app:layout_constraintBottom_toTopOf="@+id/exit"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="6dp" />
+            app:layout_constraintHorizontal_bias="0.883"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
