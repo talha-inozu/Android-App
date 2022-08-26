@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 Button lg1,ky2;
 EditText a1,a2;
@@ -20,11 +22,31 @@ EditText a1,a2;
         a2 = (EditText) findViewById(R.id.inputps);
         lg1 = (Button) findViewById(R.id.login);
         ky2 = (Button) findViewById(R.id.kayıtsayfa);
+        final Database db = new Database(getApplicationContext());
+        List<Kullanicilar> usersList = null;
+        try {
+            usersList = db.users();
+        }
+        catch (Exception th){
+
+            System.out.println(th.getMessage());
+
+        }
+        if(!usersList.isEmpty()){
+            a1.setText(usersList.get(0).getKullaniciadi());
+            a2.setText(usersList.get(0).getSifreler());
+        }
+
 
         Intent l = getIntent();
         String tkrr =  l.getStringExtra("tekrar");
-        a1.setText(tkrr);
-        final Database db = new Database(getApplicationContext());
+        if(tkrr != null){a1.setText(tkrr);}
+
+
+
+
+
+
 
         lg1.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -50,7 +50,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:ems="10"
-            android:hint="@string/app_name"
+            android:hint=""
             android:inputType=""
             android:text=" "
             app:layout_constraintBottom_toBottomOf="parent"

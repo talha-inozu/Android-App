@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Database extends SQLiteOpenHelper {
     private static final String veritabani_adi = "veritabani_kullanici";
     private static final String kullanici_tablosu= "tbl_Kullanici";
@@ -68,10 +71,25 @@ public class Database extends SQLiteOpenHelper {
              }
              while (cursor.moveToNext());
          }
-
-
-
      return b;
+    }
+
+    public List<Kullanicilar> users(){
+        SQLiteDatabase db = this.getReadableDatabase() ;
+        String query = "SELECT * FROM " + kullanici_tablosu ;
+        Cursor cursor = db.rawQuery(query, null);
+        List<Kullanicilar> usersList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                // on below line we are adding the data from cursor to our array list.
+                usersList.add(new Kullanicilar(cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getString(3)));
+            } while (cursor.moveToNext());
+            // moving our cursor to next.
+        }
+        return usersList;
     }
     public String searchKa (String Adi){
         SQLiteDatabase db = this.getReadableDatabase() ;

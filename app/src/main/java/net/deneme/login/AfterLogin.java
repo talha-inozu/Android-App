@@ -56,7 +56,9 @@ public class AfterLogin extends AppCompatActivity {
             public void onClick(View v) {
                 if(!addProbablity.getText().toString().isEmpty()){
                     probabilites.add(addProbablity.getText().toString());
-                    arrayAdapter.notifyDataSetChanged();}
+                    arrayAdapter.notifyDataSetChanged();
+                    addProbablity.setText("");
+                }
                 else{
                     Toast.makeText(getApplicationContext(),"Fields can not be NULL!!",Toast.LENGTH_LONG).show();
                 }
@@ -71,6 +73,7 @@ public class AfterLogin extends AppCompatActivity {
                     Random rand = new Random();
                     int randint = rand.nextInt(probabilites.size()-1);
                     last.setText(probabilites.get(randint));
+
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"List is empty!",Toast.LENGTH_LONG).show();
