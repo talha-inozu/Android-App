@@ -54,7 +54,9 @@ public class AfterLogin extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!addProbablity.getText().toString().isEmpty()){
+
+                String[] str = addProbablity.getText().toString().split(" ");
+                if(!addProbablity.getText().toString().isEmpty()  && !addProbablity.getText().toString().replaceAll(" ","").isEmpty()){
                     probabilites.add(addProbablity.getText().toString());
                     arrayAdapter.notifyDataSetChanged();
                     addProbablity.setText("");
@@ -71,7 +73,7 @@ public class AfterLogin extends AppCompatActivity {
             public void onClick(View v) {
                 if(probabilites.size()>0){
                     Random rand = new Random();
-                    int randint = rand.nextInt(probabilites.size()-1);
+                    int randint = rand.nextInt(probabilites.size());
                     last.setText(probabilites.get(randint));
 
                 }
