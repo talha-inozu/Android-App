@@ -69,6 +69,7 @@ public class Register extends AppCompatActivity {
                     /*String ara = db.searchKa(kaa);*/
                     Intent i = new Intent(getApplicationContext(),AfterLogin.class);
                     i.putExtra("ka",kaa);
+                    db.updateOturum(kaa);
                     startActivity(i);
 
 

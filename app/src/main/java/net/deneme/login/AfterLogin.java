@@ -28,7 +28,7 @@ public class AfterLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_login);
-
+        final Database db = new Database(getApplicationContext());
         ki1 = (TextView) findViewById(R.id.ki);
         ex1 = (Button) findViewById(R.id.exit);
         addButton = (Button) findViewById(R.id.addList);
@@ -46,7 +46,10 @@ public class AfterLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),MainActivity.class);
-                i.putExtra("tekrar",ki1.getText());
+                i.putExtra("tekrar",ki1.getText().toString());
+                System.out.println(db.findUser(ki1.getText().toString()).getOturum());
+                db.updateOturum(ki1.getText().toString());
+                System.out.println(db.findUser(ki1.getText().toString()).getOturum());
                 startActivity(i);
             }
         });

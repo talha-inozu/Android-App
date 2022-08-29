@@ -22,7 +22,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String sql_kullaniciTablosuOlusturma = "CREATE TABLE " + kullanici_tablosu + "( Adi TEXT ,Email TEXT,Saki INTEGER,Siffre TEXT)";
+        String sql_kullaniciTablosuOlusturma = "CREATE TABLE " + kullanici_tablosu + "( Adi TEXT ,Email TEXT,Saki INTEGER,Siffre TEXT,Oturum INTEGER)";
         db.execSQL(sql_kullaniciTablosuOlusturma);
     }
 
@@ -42,6 +42,7 @@ public class Database extends SQLiteOpenHelper {
             cv.put("Email",kullanici.getEmailler());
             cv.put("Saki",kullanici.getSanslisayi());
             cv.put("Siffre",kullanici.getSifreler());
+            cv.put("Oturum",kullanici.getOturum());
             long id = db.insert(kullanici_tablosu, null, cv);
             return id;}
 
@@ -85,7 +86,9 @@ public class Database extends SQLiteOpenHelper {
                 usersList.add(new Kullanicilar(cursor.getString(0),
                         cursor.getString(1),
                         cursor.getInt(2),
-                        cursor.getString(3)));
+                        cursor.getString(3),
+                        cursor.getInt(4)
+                ));
             } while (cursor.moveToNext());
             // moving our cursor to next.
         }
@@ -116,6 +119,22 @@ public class Database extends SQLiteOpenHelper {
         return b;
     }
 
+
+    public Kullanicilar findUser(String kullaniciAdi){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select * from tbl_Kullanici where  Adi =?",new String[]{kullaniciAdi} );
+        if(c.moveToFirst()){
+
+            Kullanicilar user = new Kullanicilar(c.getString(0),
+                    c.getString(1),
+                    c.getInt(2),
+                    c.getString(3),
+                    c.getInt(4));
+            return user;
+        }
+
+        return null;
+    }
    /* public String check (String Adi) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery("Select * from tbl_Kullanici where  Adi=?",new String[]{Adi} );
@@ -123,6 +142,26 @@ public class Database extends SQLiteOpenHelper {
         String baba = c.getString(adana);
         return baba;
     }*/
+
+    public void updateOturum(String kullaniciAdi){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Kullanicilar openOturumUser = findUser(kullaniciAdi);
+        ContentValues cv = new ContentValues();
+        cv.put("Adi",openOturumUser.getKullaniciadi());
+        cv.put("Email",openOturumUser.getEmailler());
+        cv.put("Saki",openOturumUser.getSanslisayi());
+        cv.put("Siffre",openOturumUser.getSifreler());
+        cv.put("Oturum",((openOturumUser.getOturum()%2)+1)%2);
+
+        db.update("tbl_Kullanici",cv,"Adi = ?",new String[]{kullaniciAdi});
+
+    }
+
+    public Boolean isOpenOturum(String kullaniciadi){
+        if(this.findUser(kullaniciadi).getOturum()==1)return true;
+        else return false;
+    }
+
 
     }
 

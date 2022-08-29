@@ -26,6 +26,10 @@ EditText a1,a2;
         List<Kullanicilar> usersList = null;
         try {
             usersList = db.users();
+            for(Kullanicilar user:usersList){
+                System.out.println(user.getOturum());
+
+            }
         }
         catch (Exception th){
 
@@ -34,18 +38,15 @@ EditText a1,a2;
         }
         if(!usersList.isEmpty()){
             a1.setText(usersList.get(0).getKullaniciadi());
-            a2.setText(usersList.get(0).getSifreler());
+            if(db.findUser(usersList.get(0).getKullaniciadi()).getOturum() ==1){a2.setText(usersList.get(0).getSifreler());;}
+            else{a2.setText("");}
+
         }
 
 
         Intent l = getIntent();
         String tkrr =  l.getStringExtra("tekrar");
         if(tkrr != null){a1.setText(tkrr);}
-
-
-
-
-
 
 
         lg1.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +59,7 @@ EditText a1,a2;
                 if (control2.equals(control3sifre)){
                     Intent k = new Intent(getApplicationContext(),AfterLogin.class);
                     k.putExtra("ka",a1.getText().toString());
+                    if(!db.isOpenOturum(a1.getText().toString()))db.updateOturum(control1);
                     startActivity(k);
 
                 }
