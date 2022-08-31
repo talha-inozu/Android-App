@@ -12,8 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-Button lg1,ky2;
-EditText a1,a2;
+    Button lg1, ky2;
+    EditText a1, a2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,29 +25,26 @@ EditText a1,a2;
         ky2 = (Button) findViewById(R.id.kayıtsayfa);
         final Database db = new Database(getApplicationContext());
         List<Kullanicilar> usersList = null;
-        try {
-            usersList = db.users();
-            for(Kullanicilar user:usersList){
-                System.out.println(user.getOturum());
+        usersList = db.users();
 
-            }
-        }
-        catch (Exception th){
 
-            System.out.println(th.getMessage());
-
-        }
-        if(!usersList.isEmpty()){
+        if (!usersList.isEmpty()) {
             a1.setText(usersList.get(0).getKullaniciadi());
-            if(db.findUser(usersList.get(0).getKullaniciadi()).getOturum() ==1){a2.setText(usersList.get(0).getSifreler());;}
-            else{a2.setText("");}
+            if (db.findUser(usersList.get(0).getKullaniciadi()).getOturum() == 1) {
+                a2.setText(usersList.get(0).getSifreler());
+                ;
+            } else {
+                a2.setText("");
+            }
 
         }
 
 
         Intent l = getIntent();
-        String tkrr =  l.getStringExtra("tekrar");
-        if(tkrr != null){a1.setText(tkrr);}
+        String tkrr = l.getStringExtra("tekrar");
+        if (tkrr != null) {
+            a1.setText(tkrr);
+        }
 
 
         lg1.setOnClickListener(new View.OnClickListener() {
@@ -56,29 +54,28 @@ EditText a1,a2;
                 String control2 = a2.getText().toString();
                 String control3sifre = db.searchPass(control1);
 
-                if (control2.equals(control3sifre)){
-                    Intent k = new Intent(getApplicationContext(),AfterLogin.class);
-                    k.putExtra("ka",a1.getText().toString());
-                    if(!db.isOpenOturum(a1.getText().toString()))db.updateOturum(control1);
+                if (control2.equals(control3sifre)) {
+                    Intent k = new Intent(getApplicationContext(), MenuGUI.class);
+                    k.putExtra("ka", a1.getText().toString());
+                    if (!db.isOpenOturum(a1.getText().toString())) db.updateOturum(control1);
                     startActivity(k);
 
-                }
-                else {
-                    Toast.makeText(getApplicationContext(),"Şifre yanlis",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Şifre yanlis", Toast.LENGTH_LONG).show();
 
                 }
 
             }
         });
 
-                ky2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), Register.class);
-                        startActivity(i);
-
-                    }
-                });
+        ky2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Register.class);
+                startActivity(i);
 
             }
-        }
+        });
+
+    }
+}

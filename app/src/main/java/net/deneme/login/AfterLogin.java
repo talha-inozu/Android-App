@@ -24,6 +24,7 @@ public class AfterLogin extends AppCompatActivity {
     ListView changeList;
     Button random;
     TextView last;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,7 @@ public class AfterLogin extends AppCompatActivity {
         Intent k = getIntent();
         ki1.setText(k.getStringExtra("ka"));
 
+
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, probabilites);
         changeList.setAdapter(arrayAdapter);
 
@@ -51,6 +53,7 @@ public class AfterLogin extends AppCompatActivity {
                 db.updateOturum(ki1.getText().toString());
                 System.out.println(db.findUser(ki1.getText().toString()).getOturum());
                 startActivity(i);
+
             }
         });
 
@@ -63,11 +66,11 @@ public class AfterLogin extends AppCompatActivity {
                     probabilites.add(addProbablity.getText().toString());
                     arrayAdapter.notifyDataSetChanged();
                     addProbablity.setText("");
+
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Fields can not be NULL!!",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 
