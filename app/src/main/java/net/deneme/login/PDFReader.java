@@ -7,7 +7,6 @@ import android.graphics.pdf.PdfRenderer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class PDFReader extends AppCompatActivity implements View.OnTouchListener {
+public class PDFReader extends AppCompatActivity  {
     Button btnOpenFile,btnNext;
     PdfRenderer renderer;
     Integer total_pages = 0;
