@@ -14,23 +14,38 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 public class PDFReader extends AppCompatActivity  {
-    Button btnOpenFile,btnNext;
-    PdfRenderer renderer;
+    Button btnOpenFile,btnNext,btnPrevious;
+    PdfRenderer renderer,rendy;
     Integer total_pages = 0;
     Integer display_page = 0;
     ImageView pdfPage;
+    Database db;
+    Intent getterIntent;
+    String userName;
+    Uri uri;
     public static final int PICK_FILE = 99;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pdf_reader);
         btnOpenFile = findViewById(R.id.openFile);
-        btnNext = findViewById(R.id.changePage);
+        btnNext = findViewById(R.id.nextPage);
+        btnPrevious = findViewById(R.id.previousPage);
         pdfPage = findViewById(R.id.imageView);
+
+        db = new Database(getApplicationContext());
+        getterIntent = getIntent();
+        userName = getterIntent.getStringExtra("ka");
+        if(!db.findUser(userName).getLastPDF().isEmpty()){
+            uri=Uri.parse(db.findUser(userName).getLastPDF());
+            display_page = db.findUser(userName).getLastPage();
+            this.onActivityResult(11,Activity.RESULT_OK,null);
+        }
+
+
+
+
 
 
         btnOpenFile.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +57,7 @@ public class PDFReader extends AppCompatActivity  {
                 startActivityForResult(intent,PICK_FILE);
             }
         });
+
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +69,19 @@ public class PDFReader extends AppCompatActivity  {
 
             }
         });
+
+        btnPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(display_page>0){
+                    display_page -=1;
+                    displayPage(display_page );
+                }
+            }
+        });
+
+
+
 
     }
 
@@ -68,28 +97,53 @@ public class PDFReader extends AppCompatActivity  {
     public void onActivityResult(int requestcode, int resultCode, Intent data) {
 
         super.onActivityResult(requestcode, resultCode, data);
+
         if (requestcode == PICK_FILE && resultCode == Activity.RESULT_OK) {
 
-            if (data == null) {
+            if (data != null) {
+                uri = data.getData();
 
-                return;
             }
-            Uri uri = data.getData();
+
+            try {
+                ParcelFileDescriptor parcelFileDescriptor = getContentResolver()
+                        .openFileDescriptor(uri, "r");
+             /*   File file = new File(uri.getPath());*/
+                renderer = new PdfRenderer(parcelFileDescriptor);
+                total_pages = renderer.getPageCount();
+                db.updatePDF(userName,uri.toString());
+                displayPage(display_page);
+            } catch (Throwable th){
+                System.out.println(th.getMessage());
+
+            }
+
+        }
+        if (requestcode == 11 && resultCode == Activity.RESULT_OK) {
+
+
+
             try {
                 ParcelFileDescriptor parcelFileDescriptor = getContentResolver()
                         .openFileDescriptor(uri, "r");
                 renderer = new PdfRenderer(parcelFileDescriptor);
                 total_pages = renderer.getPageCount();
+                db.updatePDF(userName,uri.toString());
                 displayPage(display_page);
-            } catch (FileNotFoundException fnfe){
-
-            } catch (IOException e){
+            } catch (Throwable th){
+                System.out.println(th.getMessage());
 
             }
 
         }
 
+
+
+
+
     }
+
+
 
     public void displayPage(int pageNumber){
         if (renderer != null) {
@@ -98,10 +152,13 @@ public class PDFReader extends AppCompatActivity  {
             page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
             pdfPage.setImageBitmap(mBitmap);
             page.close();
+            db.updatePage(userName,pageNumber);
 
         }
-
     }
+
+
+
 
     @Override
     public void onDestroy() {

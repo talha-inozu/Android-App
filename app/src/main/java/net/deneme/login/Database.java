@@ -21,8 +21,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        String sql_kullaniciTablosuOlusturma = "CREATE TABLE " + kullanici_tablosu + "( Adi TEXT ,Email TEXT,Saki INTEGER,Siffre TEXT,Oturum INTEGER)";
+        String sql_kullaniciTablosuOlusturma = "CREATE TABLE " + kullanici_tablosu + "( Adi TEXT ,Email TEXT,Saki INTEGER,Siffre TEXT,Oturum INTEGER,LastURİ TEXT,LastPage INTEGER)";
         db.execSQL(sql_kullaniciTablosuOlusturma);
     }
 
@@ -43,6 +42,8 @@ public class Database extends SQLiteOpenHelper {
             cv.put("Saki",kullanici.getSanslisayi());
             cv.put("Siffre",kullanici.getSifreler());
             cv.put("Oturum",kullanici.getOturum());
+            cv.put("LastURİ",kullanici.getLastPDF());
+            cv.put("LastPage",kullanici.getLastPage());
             long id = db.insert(kullanici_tablosu, null, cv);
             return id;}
 
@@ -87,8 +88,9 @@ public class Database extends SQLiteOpenHelper {
                         cursor.getString(1),
                         cursor.getInt(2),
                         cursor.getString(3),
-                        cursor.getInt(4)
-                ));
+                        cursor.getInt(4),
+                cursor.getString(5),
+                        cursor.getInt(6)));
             } while (cursor.moveToNext());
             // moving our cursor to next.
         }
@@ -129,7 +131,9 @@ public class Database extends SQLiteOpenHelper {
                     c.getString(1),
                     c.getInt(2),
                     c.getString(3),
-                    c.getInt(4));
+                    c.getInt(4),
+                    c.getString(5),
+                    c.getInt(6));
             return user;
         }
 
@@ -152,6 +156,8 @@ public class Database extends SQLiteOpenHelper {
         cv.put("Saki",openOturumUser.getSanslisayi());
         cv.put("Siffre",openOturumUser.getSifreler());
         cv.put("Oturum",((openOturumUser.getOturum()%2)+1)%2);
+        cv.put("LastURİ",openOturumUser.getLastPDF());
+        cv.put("LastPage",openOturumUser.getLastPage());
 
         db.update("tbl_Kullanici",cv,"Adi = ?",new String[]{kullaniciAdi});
 
@@ -161,6 +167,34 @@ public class Database extends SQLiteOpenHelper {
         if(this.findUser(kullaniciadi).getOturum()==1)return true;
         else return false;
     }
+    public void updatePDF(String kullaniciAdi,String uri){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Kullanicilar openOturumUser = findUser(kullaniciAdi);
+        ContentValues cv = new ContentValues();
+        cv.put("Adi",openOturumUser.getKullaniciadi());
+        cv.put("Email",openOturumUser.getEmailler());
+        cv.put("Saki",openOturumUser.getSanslisayi());
+        cv.put("Siffre",openOturumUser.getSifreler());
+        cv.put("Oturum",((openOturumUser.getOturum()%2)+1)%2);
+        cv.put("LastURİ",uri);
+        cv.put("LastPage",openOturumUser.getLastPage());
+        db.update("tbl_Kullanici",cv,"Adi = ?",new String[]{kullaniciAdi});
+    }
+
+    public void updatePage(String kullaniciAdi,Integer pageNumber){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Kullanicilar openOturumUser = findUser(kullaniciAdi);
+        ContentValues cv = new ContentValues();
+        cv.put("Adi",openOturumUser.getKullaniciadi());
+        cv.put("Email",openOturumUser.getEmailler());
+        cv.put("Saki",openOturumUser.getSanslisayi());
+        cv.put("Siffre",openOturumUser.getSifreler());
+        cv.put("Oturum",((openOturumUser.getOturum()%2)+1)%2);
+        cv.put("LastURİ",openOturumUser.getLastPDF());
+        cv.put("LastPage",pageNumber);
+        db.update("tbl_Kullanici",cv,"Adi = ?",new String[]{kullaniciAdi});
+    }
+
 
 
     }

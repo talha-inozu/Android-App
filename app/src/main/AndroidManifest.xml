@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.deneme.login">
 
-    <application
+    <application android:requestLegacyExternalStorage="true"
+
+        android:grantUriPermissions="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="Random Destiny"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AfterLogin"></activity>
+        <activity android:name=".AfterLogin"/>
         <activity android:name=".Register" />
         <activity android:name=".MenuGUI" />
         <activity android:name=".PDFReader" />
