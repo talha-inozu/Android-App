@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class PDFReader extends AppCompatActivity  {
     Button btnOpenFile,btnNext,btnPrevious;
-    PdfRenderer renderer,rendy;
+    PdfRenderer renderer;
     Integer total_pages = 0;
     Integer display_page = 0;
     ImageView pdfPage;
@@ -61,7 +61,7 @@ public class PDFReader extends AppCompatActivity  {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(total_pages>display_page){
+                if(total_pages-1>display_page){
                     display_page +=1;
                     displayPage(display_page);
                 }
@@ -148,9 +148,18 @@ public class PDFReader extends AppCompatActivity  {
     public void displayPage(int pageNumber){
         if (renderer != null) {
             PdfRenderer.Page page = renderer.openPage(pageNumber);
-            Bitmap mBitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
-            page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-            pdfPage.setImageBitmap(mBitmap);
+            /*Bitmap mBitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);*/
+
+            int pageWidth = page.getWidth();
+            int pageHeight = page.getHeight();
+            int REQ_WIDTH = pdfPage.getWidth();
+            int REQ_HEIGHT = pdfPage.getHeight();
+            float scale = Math.min((float) REQ_WIDTH / pageWidth, (float) REQ_HEIGHT / pageHeight);
+
+            Bitmap bitmap = Bitmap.createBitmap((int) (pageWidth * scale), (int) (pageHeight * scale), Bitmap.Config.ARGB_8888);
+            page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            /*page.render(mBitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);*/
+            pdfPage.setImageBitmap(bitmap);
             page.close();
             db.updatePage(userName,pageNumber);
 
