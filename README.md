@@ -1,4 +1,5 @@
-# Android-RandomChoiceAppWithLoginPage
+# Android-App
+
 
 İt is a self learn project!!
 
